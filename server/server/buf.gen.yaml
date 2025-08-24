@@ -1,0 +1,22 @@
+version: v2
+managed:
+  enabled: true
+  # override:
+  #   - file_option: go_package_prefix
+  #     value: hyperliquid-server/gen
+plugins:
+  - remote: buf.build/protocolbuffers/go
+    out: gen
+    opt: paths=source_relative
+  - remote: buf.build/connectrpc/go
+    out: gen
+    opt: paths=source_relative
+  - local: protoc-gen-es
+    opt: target=ts
+    out: gen/backend-sdk
+  - local: protoc-gen-gorm
+    out: gen
+    opt:
+      - paths=source_relative,enums=string,gateway=true,engine=postgres
+inputs:
+  - directory: proto
