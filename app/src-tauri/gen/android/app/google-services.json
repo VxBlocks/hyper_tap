@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "715636167561",
+    "project_id": "hl-message",
+    "storage_bucket": "hl-message.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715636167561:android:30df291b269da58ad58758",
+        "android_client_info": {
+          "package_name": "com.hyperapp.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVdbR7VM8H9S8F8oEy_ITQmf_1Ycty9zg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

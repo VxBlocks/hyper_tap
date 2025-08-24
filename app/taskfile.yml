@@ -1,0 +1,16 @@
+version: 3
+
+dotenv: [".env"]
+
+tasks:
+  dev-android:
+    cmds:
+      - cmd: yarn tauri android dev
+
+  dev:
+    cmds:
+      - cmd: yarn tauri dev
+  build:
+    cmds:
+      - cmd: yarn tauri android build --target aarch64
+      - adb install src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk

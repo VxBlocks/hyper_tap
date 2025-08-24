@@ -1,0 +1,3 @@
+[submodule "hyperliquid-rust-sdk"]
+	path = hyperliquid-rust-sdk
+	url = git@github.com:VxBlocks/hyperliquid-rust-sdk.git

@@ -1,0 +1,50 @@
+.dialog {
+    height: 100%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.d_t {
+    margin-top: 4px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.d_msg {
+    font-size: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.d_c {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* input-field */
+.d_i_f {
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    height:30px;
+    padding: 0 12px;
+    font-size: 10px;
+}
+
+/* input-btn */
+::deep(.d_i_btn) {
+    
+    border: none;
+    color: #000000;
+    font-size: 10px;
+}
+
+/* deposit-btn */
+.d_d_btn {
+    border: none;
+    border-radius: 8px;
+}
