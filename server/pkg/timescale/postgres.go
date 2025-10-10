@@ -17,6 +17,10 @@ var _DB *gorm.DB
 
 var _DB_once sync.Once
 
+func G[T any]() gorm.Interface[T] {
+	return gorm.G[T](GetPostgresGormDB())
+}
+
 func GetPostgresGormDB(ctx ...context.Context) *gorm.DB {
 	_DB_once.Do(func() {
 		// https://github.com/go-gorm/postgres

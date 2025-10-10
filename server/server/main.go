@@ -4,6 +4,7 @@ import (
 	"context"
 	"hyperliquid-server/firebase"
 	"hyperliquid-server/gen/login/v1/loginv1connect"
+	"hyperliquid-server/gen/news/v1/newsv1connect"
 	"hyperliquid-server/gen/userwatch/v1/userwatchv1connect"
 	"hyperliquid-server/handler"
 	"hyperliquid-server/migrators"
@@ -28,9 +29,10 @@ func main() {
 		panic(err)
 	}
 
-	// panic(firebase.SendMessageTopic(context.Background(), "watch_address", firebase.GetFirebaseApp()))
+	// panic(firebase.SendMessageTopic(context.Background(), "news", firebase.GetFirebaseApp()))
 
-	monitor.StartMonitor()
+	// monitor.StartMonitor()
+	monitor.StartNewsMonitor()
 
 	err = migrators.Migrate()
 	if err != nil {
@@ -43,6 +45,7 @@ func main() {
 	reflector := grpcreflect.NewStaticReflector(
 		userwatchv1connect.UserWatchServiceName,
 		loginv1connect.LoginServiceName,
+		newsv1connect.NewsServiceName,
 	)
 	mux.Handle(grpcreflect.NewHandlerV1(reflector))
 	mux.Handle(grpcreflect.NewHandlerV1Alpha(reflector))
@@ -52,6 +55,9 @@ func main() {
 
 	login := handler.LoginHandler{}
 	mux.Handle(loginv1connect.NewLoginServiceHandler(&login, loggingInterceptor))
+
+	news := handler.NewsHandler{}
+	mux.Handle(newsv1connect.NewNewsServiceHandler(&news, loggingInterceptor))
 
 	var addr = "0.0.0.0:" + os.Getenv("API_PORT")
 	logger.Info("starting server", "listen", addr)
