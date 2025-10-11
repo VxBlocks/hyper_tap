@@ -26,7 +26,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file news/v1/news.proto.
  */
 export const file_news_v1_news: GenFile = /*@__PURE__*/
-  fileDesc("ChJuZXdzL3YxL25ld3MucHJvdG8SB25ld3MudjEiaAoETmV3cxIMCgR1dWlkGAEgASgJEg0KBXRpdGxlGAIgASgJEhIKCmNyZWF0ZWRfYXQYAyABKAkSDwoHcHJldmlldxgEIAEoCRIQCghjYXRlZ29yeRgFIAEoCRIMCgRyZWFkGAYgASgIIhUKE0xpc3RVc2VyTmV3c1JlcXVlc3QiNgoUTGlzdFVzZXJOZXdzUmVzcG9uc2USHgoHcmVzdWx0cxgBIAMoCzINLm5ld3MudjEuTmV3cyIjChNNYXJrTmV3c1JlYWRSZXF1ZXN0EgwKBHV1aWQYASABKAkiFgoUTWFya05ld3NSZWFkUmVzcG9uc2UypwEKC05ld3NTZXJ2aWNlEkkKCExpc3ROZXdzEhwubmV3cy52MS5MaXN0VXNlck5ld3NSZXF1ZXN0Gh0ubmV3cy52MS5MaXN0VXNlck5ld3NSZXNwb25zZSIAEk0KDE1hcmtOZXdzUmVhZBIcLm5ld3MudjEuTWFya05ld3NSZWFkUmVxdWVzdBodLm5ld3MudjEuTWFya05ld3NSZWFkUmVzcG9uc2UiAEJ8Cgtjb20ubmV3cy52MUIJTmV3c1Byb3RvUAFaJWh5cGVybGlxdWlkLXNlcnZlci9nZW4vbmV3cy92MTtuZXdzdjGiAgNOWFiqAgdOZXdzLlYxygIHTmV3c1xWMeICE05ld3NcVjFcR1BCTWV0YWRhdGHqAghOZXdzOjpWMWIGcHJvdG8z", [file_google_protobuf_timestamp, file_options_gorm, file_google_protobuf_field_mask]);
+  fileDesc("ChJuZXdzL3YxL25ld3MucHJvdG8SB25ld3MudjEiaAoETmV3cxIMCgR1dWlkGAEgASgJEg0KBXRpdGxlGAIgASgJEhIKCmNyZWF0ZWRfYXQYAyABKAkSDwoHcHJldmlldxgEIAEoCRIQCghjYXRlZ29yeRgFIAEoCRIMCgRyZWFkGAYgASgIIhUKE0xpc3RVc2VyTmV3c1JlcXVlc3QiNgoUTGlzdFVzZXJOZXdzUmVzcG9uc2USHgoHcmVzdWx0cxgBIAMoCzINLm5ld3MudjEuTmV3cyIjChNNYXJrTmV3c1JlYWRSZXF1ZXN0EgwKBHV1aWQYASABKAkiFgoUTWFya05ld3NSZWFkUmVzcG9uc2UiHgoOR2V0TmV3c1JlcXVlc3QSDAoEdXVpZBgBIAEoCSI3Cg9HZXROZXdzUmVzcG9uc2USJAoGcmVzdWx0GAEgASgLMhQubmV3cy52MS5OZXdzQ29udGVudCI7CgtOZXdzQ29udGVudBIMCgR1dWlkGAEgASgJEg0KBXRpdGxlGAIgASgJEg8KB2NvbnRlbnQYAyABKAky5wEKC05ld3NTZXJ2aWNlEkkKCExpc3ROZXdzEhwubmV3cy52MS5MaXN0VXNlck5ld3NSZXF1ZXN0Gh0ubmV3cy52MS5MaXN0VXNlck5ld3NSZXNwb25zZSIAEk0KDE1hcmtOZXdzUmVhZBIcLm5ld3MudjEuTWFya05ld3NSZWFkUmVxdWVzdBodLm5ld3MudjEuTWFya05ld3NSZWFkUmVzcG9uc2UiABI+CgdHZXROZXdzEhcubmV3cy52MS5HZXROZXdzUmVxdWVzdBoYLm5ld3MudjEuR2V0TmV3c1Jlc3BvbnNlIgBCfAoLY29tLm5ld3MudjFCCU5ld3NQcm90b1ABWiVoeXBlcmxpcXVpZC1zZXJ2ZXIvZ2VuL25ld3MvdjE7bmV3c3YxogIDTlhYqgIHTmV3cy5WMcoCB05ld3NcVjHiAhNOZXdzXFYxXEdQQk1ldGFkYXRh6gIITmV3czo6VjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_options_gorm, file_google_protobuf_field_mask]);
 
 /**
  * @generated from message news.v1.News
@@ -131,6 +131,67 @@ export const MarkNewsReadResponseSchema: GenMessage<MarkNewsReadResponse> = /*@_
   messageDesc(file_news_v1_news, 4);
 
 /**
+ * @generated from message news.v1.GetNewsRequest
+ */
+export type GetNewsRequest = Message<"news.v1.GetNewsRequest"> & {
+  /**
+   * @generated from field: string uuid = 1;
+   */
+  uuid: string;
+};
+
+/**
+ * Describes the message news.v1.GetNewsRequest.
+ * Use `create(GetNewsRequestSchema)` to create a new message.
+ */
+export const GetNewsRequestSchema: GenMessage<GetNewsRequest> = /*@__PURE__*/
+  messageDesc(file_news_v1_news, 5);
+
+/**
+ * @generated from message news.v1.GetNewsResponse
+ */
+export type GetNewsResponse = Message<"news.v1.GetNewsResponse"> & {
+  /**
+   * @generated from field: news.v1.NewsContent result = 1;
+   */
+  result?: NewsContent;
+};
+
+/**
+ * Describes the message news.v1.GetNewsResponse.
+ * Use `create(GetNewsResponseSchema)` to create a new message.
+ */
+export const GetNewsResponseSchema: GenMessage<GetNewsResponse> = /*@__PURE__*/
+  messageDesc(file_news_v1_news, 6);
+
+/**
+ * @generated from message news.v1.NewsContent
+ */
+export type NewsContent = Message<"news.v1.NewsContent"> & {
+  /**
+   * @generated from field: string uuid = 1;
+   */
+  uuid: string;
+
+  /**
+   * @generated from field: string title = 2;
+   */
+  title: string;
+
+  /**
+   * @generated from field: string content = 3;
+   */
+  content: string;
+};
+
+/**
+ * Describes the message news.v1.NewsContent.
+ * Use `create(NewsContentSchema)` to create a new message.
+ */
+export const NewsContentSchema: GenMessage<NewsContent> = /*@__PURE__*/
+  messageDesc(file_news_v1_news, 7);
+
+/**
  * @generated from service news.v1.NewsService
  */
 export const NewsService: GenService<{
@@ -149,6 +210,14 @@ export const NewsService: GenService<{
     methodKind: "unary";
     input: typeof MarkNewsReadRequestSchema;
     output: typeof MarkNewsReadResponseSchema;
+  },
+  /**
+   * @generated from rpc news.v1.NewsService.GetNews
+   */
+  getNews: {
+    methodKind: "unary";
+    input: typeof GetNewsRequestSchema;
+    output: typeof GetNewsResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_news_v1_news, 0);

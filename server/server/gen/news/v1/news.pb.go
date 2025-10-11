@@ -282,6 +282,154 @@ func (*MarkNewsReadResponse) Descriptor() ([]byte, []int) {
 	return file_news_v1_news_proto_rawDescGZIP(), []int{4}
 }
 
+type GetNewsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uuid          string                 `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetNewsRequest) Reset() {
+	*x = GetNewsRequest{}
+	mi := &file_news_v1_news_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetNewsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetNewsRequest) ProtoMessage() {}
+
+func (x *GetNewsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_news_v1_news_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetNewsRequest.ProtoReflect.Descriptor instead.
+func (*GetNewsRequest) Descriptor() ([]byte, []int) {
+	return file_news_v1_news_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetNewsRequest) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+type GetNewsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Result        *NewsContent           `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetNewsResponse) Reset() {
+	*x = GetNewsResponse{}
+	mi := &file_news_v1_news_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetNewsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetNewsResponse) ProtoMessage() {}
+
+func (x *GetNewsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_news_v1_news_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetNewsResponse.ProtoReflect.Descriptor instead.
+func (*GetNewsResponse) Descriptor() ([]byte, []int) {
+	return file_news_v1_news_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetNewsResponse) GetResult() *NewsContent {
+	if x != nil {
+		return x.Result
+	}
+	return nil
+}
+
+type NewsContent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uuid          string                 `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NewsContent) Reset() {
+	*x = NewsContent{}
+	mi := &file_news_v1_news_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NewsContent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NewsContent) ProtoMessage() {}
+
+func (x *NewsContent) ProtoReflect() protoreflect.Message {
+	mi := &file_news_v1_news_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NewsContent.ProtoReflect.Descriptor instead.
+func (*NewsContent) Descriptor() ([]byte, []int) {
+	return file_news_v1_news_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *NewsContent) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *NewsContent) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *NewsContent) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
 var File_news_v1_news_proto protoreflect.FileDescriptor
 
 const file_news_v1_news_proto_rawDesc = "" +
@@ -300,10 +448,19 @@ const file_news_v1_news_proto_rawDesc = "" +
 	"\aresults\x18\x01 \x03(\v2\r.news.v1.NewsR\aresults\")\n" +
 	"\x13MarkNewsReadRequest\x12\x12\n" +
 	"\x04uuid\x18\x01 \x01(\tR\x04uuid\"\x16\n" +
-	"\x14MarkNewsReadResponse2\xa7\x01\n" +
+	"\x14MarkNewsReadResponse\"$\n" +
+	"\x0eGetNewsRequest\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid\"?\n" +
+	"\x0fGetNewsResponse\x12,\n" +
+	"\x06result\x18\x01 \x01(\v2\x14.news.v1.NewsContentR\x06result\"Q\n" +
+	"\vNewsContent\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12\x18\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent2\xe7\x01\n" +
 	"\vNewsService\x12I\n" +
 	"\bListNews\x12\x1c.news.v1.ListUserNewsRequest\x1a\x1d.news.v1.ListUserNewsResponse\"\x00\x12M\n" +
-	"\fMarkNewsRead\x12\x1c.news.v1.MarkNewsReadRequest\x1a\x1d.news.v1.MarkNewsReadResponse\"\x00B|\n" +
+	"\fMarkNewsRead\x12\x1c.news.v1.MarkNewsReadRequest\x1a\x1d.news.v1.MarkNewsReadResponse\"\x00\x12>\n" +
+	"\aGetNews\x12\x17.news.v1.GetNewsRequest\x1a\x18.news.v1.GetNewsResponse\"\x00B|\n" +
 	"\vcom.news.v1B\tNewsProtoP\x01Z%hyperliquid-server/gen/news/v1;newsv1\xa2\x02\x03NXX\xaa\x02\aNews.V1\xca\x02\aNews\\V1\xe2\x02\x13News\\V1\\GPBMetadata\xea\x02\bNews::V1b\x06proto3"
 
 var (
@@ -318,25 +475,31 @@ func file_news_v1_news_proto_rawDescGZIP() []byte {
 	return file_news_v1_news_proto_rawDescData
 }
 
-var file_news_v1_news_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_news_v1_news_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_news_v1_news_proto_goTypes = []any{
 	(*News)(nil),                 // 0: news.v1.News
 	(*ListUserNewsRequest)(nil),  // 1: news.v1.ListUserNewsRequest
 	(*ListUserNewsResponse)(nil), // 2: news.v1.ListUserNewsResponse
 	(*MarkNewsReadRequest)(nil),  // 3: news.v1.MarkNewsReadRequest
 	(*MarkNewsReadResponse)(nil), // 4: news.v1.MarkNewsReadResponse
+	(*GetNewsRequest)(nil),       // 5: news.v1.GetNewsRequest
+	(*GetNewsResponse)(nil),      // 6: news.v1.GetNewsResponse
+	(*NewsContent)(nil),          // 7: news.v1.NewsContent
 }
 var file_news_v1_news_proto_depIdxs = []int32{
 	0, // 0: news.v1.ListUserNewsResponse.results:type_name -> news.v1.News
-	1, // 1: news.v1.NewsService.ListNews:input_type -> news.v1.ListUserNewsRequest
-	3, // 2: news.v1.NewsService.MarkNewsRead:input_type -> news.v1.MarkNewsReadRequest
-	2, // 3: news.v1.NewsService.ListNews:output_type -> news.v1.ListUserNewsResponse
-	4, // 4: news.v1.NewsService.MarkNewsRead:output_type -> news.v1.MarkNewsReadResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	7, // 1: news.v1.GetNewsResponse.result:type_name -> news.v1.NewsContent
+	1, // 2: news.v1.NewsService.ListNews:input_type -> news.v1.ListUserNewsRequest
+	3, // 3: news.v1.NewsService.MarkNewsRead:input_type -> news.v1.MarkNewsReadRequest
+	5, // 4: news.v1.NewsService.GetNews:input_type -> news.v1.GetNewsRequest
+	2, // 5: news.v1.NewsService.ListNews:output_type -> news.v1.ListUserNewsResponse
+	4, // 6: news.v1.NewsService.MarkNewsRead:output_type -> news.v1.MarkNewsReadResponse
+	6, // 7: news.v1.NewsService.GetNews:output_type -> news.v1.GetNewsResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_news_v1_news_proto_init() }
@@ -350,7 +513,7 @@ func file_news_v1_news_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_news_v1_news_proto_rawDesc), len(file_news_v1_news_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

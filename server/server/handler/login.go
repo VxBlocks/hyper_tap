@@ -4,8 +4,10 @@ import (
 	"context"
 	"crypto/rand"
 	"errors"
+	"fmt"
 	loginv1 "hyperliquid-server/gen/login/v1"
 	"hyperliquid-server/gen/login/v1/loginv1connect"
+	"hyperliquid-server/hyperliquid"
 	"hyperliquid-server/models"
 	"logger"
 	"slices"
@@ -13,6 +15,7 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/lib/pq"
@@ -97,9 +100,20 @@ func (l *LoginHandler) Logout(ctx context.Context, req *connect.Request[loginv1.
 
 // Login implements loginv1connect.LoginServiceHandler.
 func (l *LoginHandler) Login(ctx context.Context, req *connect.Request[loginv1.LoginRequest]) (*connect.Response[loginv1.LoginResponse], error) {
-	err := Authenticate(req.Msg.Address, req.Msg.Msg, req.Msg.Signature)
+	agent, err := Authenticate(req.Msg.Msg, req.Msg.Signature)
 	if err != nil {
 		return nil, err
+	}
+
+	agents, err := hyperliquid.ExtraAgents(ctx, req.Msg.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	if !slices.ContainsFunc(agents, func(v hyperliquid.ExtraAgent) bool {
+		return common.HexToAddress(v.Address) == agent
+	}) {
+		return nil, connect.NewError(connect.CodePermissionDenied, fmt.Errorf("invalid agent %s is not an agent of %s", agent, req.Msg.Address))
 	}
 
 	// generate a random session
@@ -128,12 +142,12 @@ func (l *LoginHandler) Login(ctx context.Context, req *connect.Request[loginv1.L
 }
 
 // https://blog.gkomninos.com/metamask-login-using-golang-and-vuejs#heading-backend-web-server-andamp-endpoints
-func Authenticate(address string, nonce string, sigHex string) error {
+func Authenticate(nonce string, sigHex string) (common.Address, error) {
 
 	// decode the provided signature into bytes
 	sig, err := hexutil.Decode(sigHex)
 	if err != nil {
-		return err
+		return common.Address{}, err
 	}
 	// https://github.com/ethereum/go-ethereum/blob/master/internal/ethapi/api.go#L516
 	// check here why I am subtracting 27 from the last byte
@@ -144,16 +158,12 @@ func Authenticate(address string, nonce string, sigHex string) error {
 	// recover the public key that signed that data
 	recovered, err := crypto.SigToPub(msg, sig)
 	if err != nil {
-		return err
+		return common.Address{}, err
 	}
 	// create an ethereum address from the extracted public key
 	recoveredAddr := crypto.PubkeyToAddress(*recovered)
 
-	if recoveredAddr.String() != address {
-		return errors.New("address not match")
-	}
-
-	return nil
+	return recoveredAddr, nil
 }
 
 var _ loginv1connect.LoginServiceHandler = (*LoginHandler)(nil)

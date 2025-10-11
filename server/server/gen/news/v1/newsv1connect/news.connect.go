@@ -52,12 +52,15 @@ const (
 	// NewsServiceMarkNewsReadProcedure is the fully-qualified name of the NewsService's MarkNewsRead
 	// RPC.
 	NewsServiceMarkNewsReadProcedure = "/news.v1.NewsService/MarkNewsRead"
+	// NewsServiceGetNewsProcedure is the fully-qualified name of the NewsService's GetNews RPC.
+	NewsServiceGetNewsProcedure = "/news.v1.NewsService/GetNews"
 )
 
 // NewsServiceClient is a client for the news.v1.NewsService service.
 type NewsServiceClient interface {
 	ListNews(context.Context, *connect.Request[v1.ListUserNewsRequest]) (*connect.Response[v1.ListUserNewsResponse], error)
 	MarkNewsRead(context.Context, *connect.Request[v1.MarkNewsReadRequest]) (*connect.Response[v1.MarkNewsReadResponse], error)
+	GetNews(context.Context, *connect.Request[v1.GetNewsRequest]) (*connect.Response[v1.GetNewsResponse], error)
 }
 
 // NewNewsServiceClient constructs a client for the news.v1.NewsService service. By default, it uses
@@ -83,6 +86,12 @@ func NewNewsServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(newsServiceMethods.ByName("MarkNewsRead")),
 			connect.WithClientOptions(opts...),
 		),
+		getNews: connect.NewClient[v1.GetNewsRequest, v1.GetNewsResponse](
+			httpClient,
+			baseURL+NewsServiceGetNewsProcedure,
+			connect.WithSchema(newsServiceMethods.ByName("GetNews")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -90,6 +99,7 @@ func NewNewsServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 type newsServiceClient struct {
 	listNews     *connect.Client[v1.ListUserNewsRequest, v1.ListUserNewsResponse]
 	markNewsRead *connect.Client[v1.MarkNewsReadRequest, v1.MarkNewsReadResponse]
+	getNews      *connect.Client[v1.GetNewsRequest, v1.GetNewsResponse]
 }
 
 // ListNews calls news.v1.NewsService.ListNews.
@@ -102,10 +112,16 @@ func (c *newsServiceClient) MarkNewsRead(ctx context.Context, req *connect.Reque
 	return c.markNewsRead.CallUnary(ctx, req)
 }
 
+// GetNews calls news.v1.NewsService.GetNews.
+func (c *newsServiceClient) GetNews(ctx context.Context, req *connect.Request[v1.GetNewsRequest]) (*connect.Response[v1.GetNewsResponse], error) {
+	return c.getNews.CallUnary(ctx, req)
+}
+
 // NewsServiceHandler is an implementation of the news.v1.NewsService service.
 type NewsServiceHandler interface {
 	ListNews(context.Context, *connect.Request[v1.ListUserNewsRequest]) (*connect.Response[v1.ListUserNewsResponse], error)
 	MarkNewsRead(context.Context, *connect.Request[v1.MarkNewsReadRequest]) (*connect.Response[v1.MarkNewsReadResponse], error)
+	GetNews(context.Context, *connect.Request[v1.GetNewsRequest]) (*connect.Response[v1.GetNewsResponse], error)
 }
 
 // NewNewsServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -127,12 +143,20 @@ func NewNewsServiceHandler(svc NewsServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(newsServiceMethods.ByName("MarkNewsRead")),
 		connect.WithHandlerOptions(opts...),
 	)
+	newsServiceGetNewsHandler := connect.NewUnaryHandler(
+		NewsServiceGetNewsProcedure,
+		svc.GetNews,
+		connect.WithSchema(newsServiceMethods.ByName("GetNews")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/news.v1.NewsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NewsServiceListNewsProcedure:
 			newsServiceListNewsHandler.ServeHTTP(w, r)
 		case NewsServiceMarkNewsReadProcedure:
 			newsServiceMarkNewsReadHandler.ServeHTTP(w, r)
+		case NewsServiceGetNewsProcedure:
+			newsServiceGetNewsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -148,4 +172,8 @@ func (UnimplementedNewsServiceHandler) ListNews(context.Context, *connect.Reques
 
 func (UnimplementedNewsServiceHandler) MarkNewsRead(context.Context, *connect.Request[v1.MarkNewsReadRequest]) (*connect.Response[v1.MarkNewsReadResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("news.v1.NewsService.MarkNewsRead is not implemented"))
+}
+
+func (UnimplementedNewsServiceHandler) GetNews(context.Context, *connect.Request[v1.GetNewsRequest]) (*connect.Response[v1.GetNewsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("news.v1.NewsService.GetNews is not implemented"))
 }

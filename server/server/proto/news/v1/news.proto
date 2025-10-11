@@ -45,7 +45,22 @@ message MarkNewsReadRequest {
 message MarkNewsReadResponse {
 }
 
+message GetNewsRequest {
+  string uuid = 1;
+}
+
+message GetNewsResponse {
+  NewsContent result = 1;
+}
+
+message NewsContent {
+  string uuid = 1;
+  string title = 2;
+  string content = 3;
+}
+
 service NewsService {
   rpc ListNews(ListUserNewsRequest) returns (ListUserNewsResponse) {}
   rpc MarkNewsRead(MarkNewsReadRequest) returns (MarkNewsReadResponse) {}
+  rpc GetNews(GetNewsRequest) returns (GetNewsResponse) {}
 }
