@@ -22,9 +22,8 @@ func GetFirebaseApp() *firebase.App {
 
 func InitFirebaseApp(ctx context.Context) (*firebase.App, error) {
 	opt := option.WithCredentialsJSON(serviceAccountKey)
-	config := &firebase.Config{ProjectID: "hl-message"}
 	var err error
-	app, err = firebase.NewApp(ctx, config, opt)
+	app, err = firebase.NewApp(ctx, nil, opt)
 	if err != nil {
 		return nil, fmt.Errorf("error initializing app: %v", err)
 	}
