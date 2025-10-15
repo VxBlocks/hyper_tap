@@ -1,25 +1,41 @@
-version: "3"
+version: 3
 
 vars:
-  DOCKER_REGISTRY: ghcr.io/vxblocks/neptune-explorer-backend
-  GIT_REPO: https://github.com/VxBlocks/zulu-explorer_backend
+  DOCKER_REGISTRY: ghcr.io/vxblocks/hyper_app
+  GIT_REPO: https://github.com/VxBlocks/hyper_app
+
 dotenv:
   - ".env"
-interval: "500ms"
 
 tasks:
-  build-fetcher:
-    cmd:
-      task: build-docker
-      vars:
-        docker_tag: "{{.DOCKER_REGISTRY}}/fetcher:{{.NETWORK}}"
-        dockerfile: "dockerfiles/fetcher.dockerfile"
+  deps:
+    cmds:
+      - go get -tool github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
+      - go install github.com/golang/protobuf/protoc-gen-go@latest
+      - go install github.com/infobloxopen/protoc-gen-gorm@latest
+  gen:
+    cmds:
+      - rm -rf gen
+      - buf generate
+      # - go generate
+
+  run:
+    deps:
+      - task: tunnel
+      - task: go-run
+
+  go-run:
+    cmd: go run hyperliquid-server
+
+  tunnel:
+    cmds:
+      - cloudflared tunnel run --token ${CLOUDFLARE_TUNNEL_TOKEN}
 
   build-api:
     cmd:
       task: build-docker
       vars:
-        docker_tag: "{{.DOCKER_REGISTRY}}/api:{{.NETWORK}}"
+        docker_tag: "{{.DOCKER_REGISTRY}}/api:{{.VERSION}}"
         dockerfile: "dockerfiles/api.dockerfile"
 
   build-docker:
@@ -35,31 +51,3 @@ tasks:
         {{if .DOC}} --label org.opencontainers.image.documentation={{.DOC}} {{end}}
         .
       - docker push {{.docker_tag}}
-
-  run-fetcher:
-    cmd: go run fetcher
-
-  delete-data:
-    cmd: go run fetcher drop
-
-  build-api-go:
-    dir: app
-    sources:
-      - "**/*.go"
-    cmds:
-      - go build -o ./tmp/main main.go
-    generates:
-      - ./tmp/main
-
-  run-api:
-    watch: true
-    dir: app
-    deps: [build-api-go]
-    cmd: ./tmp/main
-
-  start-test:
-    cmd: docker compose -f test.docker-compose.yml up -d
-
-  gen:
-    dir: app
-    cmd: go generate
