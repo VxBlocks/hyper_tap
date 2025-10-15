@@ -4,14 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"hyperliquid-server/firebase"
 	"logger"
 	"net/http"
 	"time"
 	"timescale"
 
-	gofirebase "firebase.google.com/go/v4"
-	"firebase.google.com/go/v4/messaging"
 	"gorm.io/gorm"
 )
 
@@ -65,7 +62,7 @@ func checkUpdateNews(ctx context.Context) error {
 				return err
 			}
 			logger.Info("created news", "uuid", entry.UUID)
-			sendToNewsTopic(ctx, "news", &entry, firebase.GetFirebaseApp())
+			sendToNewsTopic(ctx, &entry)
 		}
 	}
 
@@ -89,33 +86,16 @@ func getNews(ctx context.Context) ([]NewsOrm, error) {
 	return news.Entries, nil
 }
 
-func sendToNewsTopic(ctx context.Context, topic string, msg *NewsOrm, app *gofirebase.App) error {
-	client, err := app.Messaging(ctx)
-	if err != nil {
-		return fmt.Errorf("error initializing messaging client: %v", err)
-	}
+func sendToNewsTopic(ctx context.Context, msg *NewsOrm) error {
 
-	fcmMsg := messaging.Message{
-		Topic: topic,
+	return sendToFcmTopic(ctx, "news", MessageOption{
+		ChannelID: "news",
+		Title:     msg.Title,
+		Body:      msg.Preview,
 		Data: map[string]string{
 			"message": msg.Title,
 			"type":    msg.Category,
 			"id":      msg.UUID,
 		},
-		Notification: &messaging.Notification{
-			Title: msg.Title,
-			Body:  msg.Preview,
-		},
-		Android: &messaging.AndroidConfig{
-			Priority:     "normal",
-			DirectBootOK: true,
-		},
-	}
-
-	_, err = client.Send(ctx, &fcmMsg)
-	if err != nil {
-		return fmt.Errorf("error SendMulticast: %v", err)
-	}
-
-	return nil
+	})
 }

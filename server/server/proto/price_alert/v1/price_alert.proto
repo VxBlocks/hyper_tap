@@ -20,48 +20,34 @@ import "google/protobuf/timestamp.proto";
 import "options/gorm.proto";
 import "google/protobuf/field_mask.proto";
 
-option go_package = "hyperliquid-server/gen/news/v1;newsv1";
+option go_package = "hyperliquid-server/gen/price_alert/v1;pricealertv1";
 
-message News {
-  string uuid = 1;
-  string title = 2;
-  string created_at = 3;
-  string preview = 4;
-  string category = 5;
+message PriceAlert {
+  uint32 id = 1;
+  uint32 asset_id = 2;
+  string symbol = 3;
+  string change_percent = 4;
+  string created_at = 5;
   bool read = 6;
 }
 
-message ListUserNewsRequest {
+message ListPriceAlertRequest {
+  repeated int32 asset_ids = 1;
 }
 
-message ListUserNewsResponse {
-  repeated News results = 1;
+message ListPriceAlertResponse {
+  repeated PriceAlert results = 1;
 }
 
-message MarkNewsReadRequest {
-  string uuid = 1;
+message MarkPriceAlertReadRequest {
+  uint32 alert_id = 1;
 }
 
-message MarkNewsReadResponse {
+message MarkPriceAlertReadResponse {
 }
 
-message GetNewsRequest {
-  string uuid = 1;
-}
-
-message GetNewsResponse {
-  NewsContent result = 1;
-}
-
-message NewsContent {
-  string uuid = 1;
-  string title = 2;
-  string content = 3;
-}
-
-service NewsService {
+service PriceAlertService {
   option (gorm.server).autogen = false;
-  rpc ListNews(ListUserNewsRequest) returns (ListUserNewsResponse) {}
-  rpc MarkNewsRead(MarkNewsReadRequest) returns (MarkNewsReadResponse) {}
-  rpc GetNews(GetNewsRequest) returns (GetNewsResponse) {}
+  rpc ListPriceAlerts(ListPriceAlertRequest) returns (ListPriceAlertResponse) {}
+  rpc MarkPriceAlertsRead(MarkPriceAlertReadRequest) returns (MarkPriceAlertReadResponse) {}
 }

@@ -87,7 +87,8 @@ func (n *NewsHandler) MarkNewsRead(ctx context.Context, req *connect.Request[new
 var _ newsv1connect.NewsServiceHandler = (*NewsHandler)(nil)
 
 type NewsReadOrm struct {
-	NewsId string `gorm:"primaryKey"`
+	ID     uint   `gorm:"primarykey"`
+	NewsId string `gorm:"index"`
 	UserId string `gorm:"index"`
 }
 

@@ -20,7 +20,11 @@ require (
 	gorm.io/gorm v1.30.1
 )
 
-require github.com/ysmood/gop v0.2.0 // indirect
+require (
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/ysmood/gop v0.2.0 // indirect
+)
 
 require (
 	cel.dev/expr v0.24.0 // indirect
@@ -83,6 +87,7 @@ require (
 	github.com/speakeasy-api/openapi-overlay v0.10.2 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
 	github.com/supranational/blst v0.3.14 // indirect
+	github.com/tidwall/gjson v1.18.0
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	github.com/vmware-labs/yaml-jsonpath v0.3.2 // indirect
 	github.com/ysmood/got v0.41.0

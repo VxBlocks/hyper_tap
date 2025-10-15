@@ -29,10 +29,19 @@ func main() {
 		panic(err)
 	}
 
-	// panic(firebase.SendMessageTopic(context.Background(), "news", firebase.GetFirebaseApp()))
+	// err = firebase.SendMessageTopic(context.Background(), "news", firebase.GetFirebaseApp())
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// err = firebase.SendMessage(context.Background(), "cw7EFJ8MRCi46aY89SbbVu:APA91bEH9e9mZhMBNZ6a2l1mpFs7d0sV4o5Toe1aoP_PRVOqpOm3-_aRPna7c3f_2J8mOD0hbKDkW3mhe_fXp7c7gI23BGAfYzt0WayRLIdMy_FbKrHmSWo", firebase.GetFirebaseApp())
+	// if err != nil {
+	// 	panic(err)
+	// }
 
+	// return
 	// monitor.StartMonitor()
 	monitor.StartNewsMonitor()
+	monitor.StartPriceMonitor()
 
 	err = migrators.Migrate()
 	if err != nil {

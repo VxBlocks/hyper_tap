@@ -456,11 +456,11 @@ const file_news_v1_news_proto_rawDesc = "" +
 	"\vNewsContent\x12\x12\n" +
 	"\x04uuid\x18\x01 \x01(\tR\x04uuid\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent2\xe7\x01\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent2\xed\x01\n" +
 	"\vNewsService\x12I\n" +
 	"\bListNews\x12\x1c.news.v1.ListUserNewsRequest\x1a\x1d.news.v1.ListUserNewsResponse\"\x00\x12M\n" +
 	"\fMarkNewsRead\x12\x1c.news.v1.MarkNewsReadRequest\x1a\x1d.news.v1.MarkNewsReadResponse\"\x00\x12>\n" +
-	"\aGetNews\x12\x17.news.v1.GetNewsRequest\x1a\x18.news.v1.GetNewsResponse\"\x00B|\n" +
+	"\aGetNews\x12\x17.news.v1.GetNewsRequest\x1a\x18.news.v1.GetNewsResponse\"\x00\x1a\x04\xba\xb9\x19\x00B|\n" +
 	"\vcom.news.v1B\tNewsProtoP\x01Z%hyperliquid-server/gen/news/v1;newsv1\xa2\x02\x03NXX\xaa\x02\aNews.V1\xca\x02\aNews\\V1\xe2\x02\x13News\\V1\\GPBMetadata\xea\x02\bNews::V1b\x06proto3"
 
 var (

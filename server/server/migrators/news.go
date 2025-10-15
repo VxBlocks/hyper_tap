@@ -47,6 +47,12 @@ func (s NewsMigrator) Migrations() []*gormigrate.Migration {
 				return nil
 			},
 			Rollback: func(tx *gorm.DB) error {
+
+				err := tx.Exec(`DROP FUNCTION IF EXISTS news_is_read;`).Error
+				if err != nil {
+					return err
+				}
+
 				return tx.Migrator().DropTable(&monitor.NewsOrm{}, &handler.NewsReadOrm{})
 			},
 		},

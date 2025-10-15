@@ -44,6 +44,7 @@ func MigrateTable(model Migrator) error {
 	err := m.Migrate()
 	slog.Info("migrate table", "name", model.TableName())
 	if err != nil {
+		m.RollbackLast()
 		return fmt.Errorf("error migrate table :%w", err)
 	}
 
