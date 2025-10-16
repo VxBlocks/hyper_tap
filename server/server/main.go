@@ -1,6 +1,7 @@
 package main
 
 import (
+	"config"
 	"context"
 	"hyperliquid-server/firebase"
 	"hyperliquid-server/gen/login/v1/loginv1connect"
@@ -9,6 +10,7 @@ import (
 	"hyperliquid-server/gen/userwatch/v1/userwatchv1connect"
 	"hyperliquid-server/handler"
 	"hyperliquid-server/migrators"
+	"hyperliquid-server/monitor"
 	"logger"
 	"net/http"
 	"os"
@@ -40,8 +42,10 @@ func main() {
 
 	// return
 	// monitor.StartMonitor()
-	// monitor.StartNewsMonitor()
-	// monitor.StartPriceMonitor()
+	if config.C.Postgres.Url != "10.10.2.11" {
+		monitor.StartNewsMonitor()
+		monitor.StartPriceMonitor()
+	}
 
 	err = migrators.Migrate()
 	if err != nil {
