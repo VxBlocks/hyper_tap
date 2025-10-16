@@ -5,10 +5,10 @@ import (
 	"hyperliquid-server/firebase"
 	"hyperliquid-server/gen/login/v1/loginv1connect"
 	"hyperliquid-server/gen/news/v1/newsv1connect"
+	"hyperliquid-server/gen/price_alert/v1/pricealertv1connect"
 	"hyperliquid-server/gen/userwatch/v1/userwatchv1connect"
 	"hyperliquid-server/handler"
 	"hyperliquid-server/migrators"
-	"hyperliquid-server/monitor"
 	"logger"
 	"net/http"
 	"os"
@@ -40,8 +40,8 @@ func main() {
 
 	// return
 	// monitor.StartMonitor()
-	monitor.StartNewsMonitor()
-	monitor.StartPriceMonitor()
+	// monitor.StartNewsMonitor()
+	// monitor.StartPriceMonitor()
 
 	err = migrators.Migrate()
 	if err != nil {
@@ -55,6 +55,7 @@ func main() {
 		userwatchv1connect.UserWatchServiceName,
 		loginv1connect.LoginServiceName,
 		newsv1connect.NewsServiceName,
+		pricealertv1connect.PriceAlertServiceName,
 	)
 	mux.Handle(grpcreflect.NewHandlerV1(reflector))
 	mux.Handle(grpcreflect.NewHandlerV1Alpha(reflector))
@@ -67,6 +68,14 @@ func main() {
 
 	news := handler.NewsHandler{}
 	mux.Handle(newsv1connect.NewNewsServiceHandler(&news, loggingInterceptor))
+
+	priceAlert := handler.PriceAlertHandler{}
+	mux.Handle(pricealertv1connect.NewPriceAlertServiceHandler(&priceAlert, loggingInterceptor))
+
+	mux.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hello world!"))
+		w.Header().Set("Content-Type", "application/text; charset=utf-8")
+	})
 
 	var addr = "0.0.0.0:" + os.Getenv("API_PORT")
 	logger.Info("starting server", "listen", addr)

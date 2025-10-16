@@ -56,9 +56,6 @@ func (PriceAlertState) TableName() string {
 	return "price_alert_states"
 }
 
-// Store last alert information to track additional 2% changes
-var lastAlertPrices = make(map[int]float64)
-
 func getPrices(ctx context.Context) ([]TokenPrice, error) {
 	metaAndAssetCtx, err := hyperliquid.GetMetaAndAssetCtx(ctx)
 	if err != nil {
@@ -80,7 +77,16 @@ func getPrices(ctx context.Context) ([]TokenPrice, error) {
 // MonitorPriceChanges checks for significant price changes and sends alerts
 func MonitorPriceChanges(ctx context.Context) {
 	// Load last alert prices from database
-	loadLastAlertPrices(ctx)
+	alertPrices, err := loadLastAlertPrices(ctx)
+	if err != nil {
+		logger.Error("Failed to load last alert prices", "error", err)
+		return
+	}
+
+	var lastAlertPrices = make(map[int]PriceAlertState)
+	for _, alert := range alertPrices {
+		lastAlertPrices[alert.AssetID] = alert
+	}
 
 	prices, err := getPrices(ctx)
 	if err != nil {
@@ -113,8 +119,8 @@ func MonitorPriceChanges(ctx context.Context) {
 			// Check if we've sent an alert before
 			lastAlertPrice, hasAlerted := lastAlertPrices[price.AssetID]
 
-			// If we haven't alerted yet, send alert
-			if !hasAlerted {
+			// 没有发送过，或者过了12h
+			if !hasAlerted || lastAlertPrice.CreatedAt.Add(time.Hour*12).Before(time.Now()) {
 				alert := PriceAlert{
 					AssetID:       price.AssetID,
 					Symbol:        price.Symbol,
@@ -126,14 +132,13 @@ func MonitorPriceChanges(ctx context.Context) {
 				}
 
 				sendPriceAlert(ctx, alert)
-				lastAlertPrices[price.AssetID] = currentPrice
 				saveLastAlertPrice(ctx, price.AssetID, currentPrice)
 				continue
-			}
+			} else {
 
-			// If we have alerted before, check for additional 2% change from last alert
-			if lastAlertPrice > 0 {
-				additionalChangePercent := (currentPrice - lastAlertPrice) / lastAlertPrice * 100
+				// If we have alerted before, check for additional 2% change from last alert
+
+				additionalChangePercent := (currentPrice - lastAlertPrice.LastAlertPrice) / lastAlertPrice.LastAlertPrice * 100
 				if math.Abs(additionalChangePercent) > 2.0 {
 					alert := PriceAlert{
 						AssetID:       price.AssetID,
@@ -146,7 +151,6 @@ func MonitorPriceChanges(ctx context.Context) {
 					}
 
 					sendPriceAlert(ctx, alert)
-					lastAlertPrices[price.AssetID] = currentPrice
 					saveLastAlertPrice(ctx, price.AssetID, currentPrice)
 				}
 			}
@@ -155,16 +159,13 @@ func MonitorPriceChanges(ctx context.Context) {
 }
 
 // loadLastAlertPrices loads the last alert prices from the database
-func loadLastAlertPrices(ctx context.Context) {
+func loadLastAlertPrices(ctx context.Context) ([]PriceAlertState, error) {
 	var states []PriceAlertState
 	if err := timescale.GetPostgresGormDB(ctx).Find(&states).Error; err != nil {
-		logger.Error("Failed to load alert states", "error", err)
-		return
+		return nil, err
 	}
 
-	for _, state := range states {
-		lastAlertPrices[state.AssetID] = state.LastAlertPrice
-	}
+	return states, nil
 }
 
 // saveLastAlertPrice saves the last alert price to the database

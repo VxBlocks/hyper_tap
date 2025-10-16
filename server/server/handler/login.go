@@ -152,6 +152,9 @@ func Authenticate(nonce string, sigHex string) (common.Address, error) {
 	// https://github.com/ethereum/go-ethereum/blob/master/internal/ethapi/api.go#L516
 	// check here why I am subtracting 27 from the last byte
 	// I spent a lot of time to figure out that
+	if len(sig) < crypto.SignatureLength {
+		return common.Address{}, fmt.Errorf("signature length is %d, want %d", len(sig), crypto.SignatureLength)
+	}
 	sig[crypto.RecoveryIDOffset] -= 27
 	// now hash the nonce
 	msg := accounts.TextHash([]byte(nonce))
