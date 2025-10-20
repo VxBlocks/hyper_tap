@@ -7,6 +7,7 @@ import (
 	newsv1 "hyperliquid-server/gen/news/v1"
 	"hyperliquid-server/gen/news/v1/newsv1connect"
 	"hyperliquid-server/hyperliquid"
+	"hyperliquid-server/models"
 	"hyperliquid-server/monitor"
 	"timescale"
 
@@ -72,7 +73,7 @@ func (n *NewsHandler) MarkNewsRead(ctx context.Context, req *connect.Request[new
 		return nil, fmt.Errorf("could not get user id from session: %w", err)
 	}
 
-	err = timescale.GetPostgresGormDB(ctx).Save(&NewsReadOrm{
+	err = timescale.GetPostgresGormDB(ctx).Save(&models.NewsReadOrm{
 		NewsId: req.Msg.GetUuid(),
 		UserId: user_id,
 	}).Error
@@ -85,11 +86,3 @@ func (n *NewsHandler) MarkNewsRead(ctx context.Context, req *connect.Request[new
 }
 
 var _ newsv1connect.NewsServiceHandler = (*NewsHandler)(nil)
-
-type NewsReadOrm struct {
-	ID     uint   `gorm:"primarykey"`
-	NewsId string `gorm:"index"`
-	UserId string `gorm:"index"`
-}
-
-func (NewsReadOrm) TableName() string { return "news_read" }

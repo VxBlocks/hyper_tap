@@ -1,7 +1,7 @@
 package migrators
 
 import (
-	"hyperliquid-server/handler"
+	"hyperliquid-server/models"
 	"hyperliquid-server/monitor"
 
 	"github.com/go-gormigrate/gormigrate/v2"
@@ -25,7 +25,7 @@ func (s NewsMigrator) Migrations() []*gormigrate.Migration {
 			ID: "create_news_table",
 			Migrate: func(tx *gorm.DB) error {
 
-				err := tx.AutoMigrate(&monitor.NewsOrm{}, &handler.NewsReadOrm{})
+				err := tx.AutoMigrate(&monitor.NewsOrm{}, &models.NewsReadOrm{})
 				if err != nil {
 					return err
 				}
@@ -53,7 +53,7 @@ func (s NewsMigrator) Migrations() []*gormigrate.Migration {
 					return err
 				}
 
-				return tx.Migrator().DropTable(&monitor.NewsOrm{}, &handler.NewsReadOrm{})
+				return tx.Migrator().DropTable(&monitor.NewsOrm{}, &models.NewsReadOrm{})
 			},
 		},
 	}

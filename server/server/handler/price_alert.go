@@ -5,6 +5,7 @@ import (
 	"fmt"
 	pricealertv1 "hyperliquid-server/gen/price_alert/v1"
 	"hyperliquid-server/gen/price_alert/v1/pricealertv1connect"
+	"hyperliquid-server/models"
 	"hyperliquid-server/monitor"
 	"timescale"
 
@@ -48,7 +49,7 @@ func (p *PriceAlertHandler) MarkPriceAlertsRead(ctx context.Context, req *connec
 		return nil, fmt.Errorf("could not get user id from session: %w", err)
 	}
 
-	err = timescale.GetPostgresGormDB(ctx).Save(&PriceAlertReadOrm{
+	err = timescale.GetPostgresGormDB(ctx).Save(&models.PriceAlertReadOrm{
 		AlertId: req.Msg.GetAlertId(),
 		UserId:  user_id,
 	}).Error
@@ -61,11 +62,3 @@ func (p *PriceAlertHandler) MarkPriceAlertsRead(ctx context.Context, req *connec
 }
 
 var _ pricealertv1connect.PriceAlertServiceHandler = (*PriceAlertHandler)(nil)
-
-type PriceAlertReadOrm struct {
-	ID      uint   `gorm:"primarykey"`
-	AlertId uint32 `gorm:"index"`
-	UserId  string `gorm:"index"`
-}
-
-func (PriceAlertReadOrm) TableName() string { return "price_alert_read" }

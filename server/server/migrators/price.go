@@ -1,7 +1,7 @@
 package migrators
 
 import (
-	"hyperliquid-server/handler"
+	"hyperliquid-server/models"
 	"hyperliquid-server/monitor"
 
 	"github.com/go-gormigrate/gormigrate/v2"
@@ -21,7 +21,7 @@ func (p PriceMigrator) Migrations() []*gormigrate.Migration {
 		{
 			ID: "create_price_alerts_tables",
 			Migrate: func(tx *gorm.DB) error {
-				err := tx.AutoMigrate(&monitor.PriceAlert{}, &monitor.PriceAlertState{}, &handler.PriceAlertReadOrm{})
+				err := tx.AutoMigrate(&monitor.PriceAlert{}, &monitor.PriceAlertState{}, &models.PriceAlertReadOrm{})
 				if err != nil {
 					return err
 				}
@@ -48,7 +48,7 @@ func (p PriceMigrator) Migrations() []*gormigrate.Migration {
 					return err
 				}
 
-				err = tx.Migrator().DropTable(&monitor.PriceAlert{}, &monitor.PriceAlertState{}, &handler.PriceAlertReadOrm{})
+				err = tx.Migrator().DropTable(&monitor.PriceAlert{}, &monitor.PriceAlertState{}, &models.PriceAlertReadOrm{})
 				if err != nil {
 					return err
 				}
